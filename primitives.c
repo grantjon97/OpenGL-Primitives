@@ -2,6 +2,38 @@
 
 char lastKeyPressed = 'a';
 
+void init() {
+
+    GLfloat mat_specular[] = {0.7, 0.7, 0.7, 1};
+    GLfloat mat_shininess[] = {20};
+    GLfloat light_position[] = {1, 1, 1, 0};
+    glClearColor(0, 0, 0, 0);
+    glShadeModel(GL_SMOOTH);
+
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+    glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+    glEnable(GL_DEPTH_TEST);
+}
+
+void reshape (int w, int h) {
+
+    glViewport(0, 0, (GLsizei) w, (GLsizei) h);
+    glMatrixMode (GL_PROJECTION);
+    glLoadIdentity();
+    if (w <= h)
+        glOrtho (-1.5, 1.5, -1.5*(GLfloat)h/(GLfloat)w,
+            1.5*(GLfloat)h/(GLfloat)w, -10, 10);
+    else
+        glOrtho(-1.5*(GLfloat)w/(GLfloat)h,
+            1.5*(GLfloat)w/(GLfloat)h, -1.5, 1.5, -10, 10);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+}
+
 void vertices() {
     /* Makes two colored triangles in the shape of an hourglass
     //
@@ -9,8 +41,8 @@ void vertices() {
     // The second triangle is drawn in the counter-clockwise direction
     */
 
-    glClearColor(0, 0, 0, 1);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glDisable(GL_LIGHTING);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glBegin(GL_TRIANGLES);
 
@@ -31,14 +63,14 @@ void vertices() {
     glVertex2f(0.7, -0.9);
 
     glEnd();
-    glutSwapBuffers();
+    glFlush();
 }
 
 void triangleStrip() {
     /* Makes strips of triangles connected together */
 
-    glClearColor(0, 0, 0, 1);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glDisable(GL_LIGHTING);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glBegin(GL_TRIANGLE_STRIP);
 
@@ -56,14 +88,14 @@ void triangleStrip() {
     glVertex2f(-0.6, 0.75);
 
     glEnd();
-    glutSwapBuffers();
+    glFlush();
 }
 
 void triangleFan() {
     /* Makes a fan of triangles with the first vertex fixed */
 
-    glClearColor(0, 0, 0, 1);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glDisable(GL_LIGHTING);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glBegin(GL_TRIANGLE_FAN);
 
@@ -90,15 +122,15 @@ void triangleFan() {
     glVertex2f(0.0, 1.0);
 
     glEnd();
-    glutSwapBuffers();
+    glFlush();
 }
 
 void quads() {
     // Draws retangles stacked in a pyramid shape
     // Shown by pressing f or F key
 
-    glClearColor(0, 0, 0, 1);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glDisable(GL_LIGHTING);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glBegin(GL_QUADS);
 
@@ -145,15 +177,15 @@ void quads() {
     glVertex2f(.1, .5);
 
     glEnd();
-    glutSwapBuffers();
+    glFlush();
 }
 
 void quadStrip() {
     // Draws strips of quadrilaterals connected together
     // Shown by pressing g or G key
 
-    glClearColor(0, 0, 0, 1);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glDisable(GL_LIGHTING);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glBegin(GL_QUAD_STRIP);
 
@@ -176,15 +208,15 @@ void quadStrip() {
     glVertex2f(.7, -.1);
 
     glEnd();
-    glutSwapBuffers();
+    glFlush();
 }
 
 void polygons() {
     // Makes a polygon shape (GL_POLYGON can make any n-sided poly)
     // Shown by pressing h or H key
 
-    glClearColor(0, 0, 0, 1);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glDisable(GL_LIGHTING);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glBegin(GL_POLYGON);
 
@@ -201,15 +233,15 @@ void polygons() {
     glVertex2f(-.7, -.3);
 
     glEnd();
-    glutSwapBuffers();
+    glFlush();
 }
 
 void points() {
     // Draws a line of points in a row
     // Shown by pressing z or Z key
 
-    glClearColor(0, 0, 0, 1);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glDisable(GL_LIGHTING);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glPointSize(20);
     glEnable(GL_POINT_SMOOTH);
 
@@ -224,15 +256,15 @@ void points() {
     }
 
     glEnd();
-    glutSwapBuffers();
+    glFlush();
 }
 
 void lines() {
     // Shows a series of parallel lines
     // Shown by drawing x or X key
 
-    glClearColor(0, 0, 0, 1);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glDisable(GL_LIGHTING);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glBegin(GL_LINES);
 
@@ -246,15 +278,15 @@ void lines() {
 
 
     glEnd();
-    glutSwapBuffers();
+    glFlush();
 }
 
 void lineStrip() {
     // Shows a series of parallel lines connected by diags
     // Shown by pressing c or C key
 
-    glClearColor(0, 0, 0, 1);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glDisable(GL_LIGHTING);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glBegin(GL_LINE_STRIP);
 
@@ -267,15 +299,15 @@ void lineStrip() {
     }
 
     glEnd();
-    glutSwapBuffers();
+    glFlush();
 }
 
 void lineLoop() {
     // Shows a series of parallel connected lines, and loops around
     // Shown by pressing v or V key
 
-    glClearColor(0, 0, 0, 1);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glDisable(GL_LIGHTING);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glBegin(GL_LINE_LOOP);
 
@@ -288,7 +320,258 @@ void lineLoop() {
     }
 
     glEnd();
-    glutSwapBuffers();
+    glFlush();
+}
+
+// 3D primitives:
+// Source: https://www.opengl.org/resources/libraries/glut/spec3/node81.html
+// glutSolidSphere, glutWireSphere
+// glutSolidCube, glutWireCube
+// glutSolidCone, glutWireCone
+// glutSolidTorus, glutWireTorus
+// glutSolidDodecahedron, glutWireDodecahedron
+// glutSolidOctahedron, glutWireOctahedron
+// glutSolidTetrahedron. glutWireTetrahedron
+// glutSolidIcosahedron, glutWireIcosahedron
+// glutSolidTeapot, glutWireTeapot
+
+void sphereWire() {
+
+    glEnable(GL_LIGHTING);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glColor3f(1, 1, 0);
+
+    glutWireSphere(1.0, 100, 100);
+    glFlush();
+}
+
+void sphereSolid() {
+
+    glEnable(GL_LIGHTING);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glColor3f(0, 0, 1);
+    glutSolidSphere(1.0, 100, 100);
+    glFlush();
+}
+
+void cubeWire() {
+
+    glEnable(GL_LIGHTING);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glColor3f(1, 1, 1);
+    glPushMatrix();
+    glRotatef(-45.0, 1.0, 0.0, 0.0);
+    glRotatef(45.0, 0.0, 0.0, 1.0);
+
+    glutWireCube(1.0);
+
+    glPopMatrix();
+    glFlush();
+}
+
+void cubeSolid() {
+
+    glEnable(GL_LIGHTING);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glColor3f(1, 1, 1);
+    glPushMatrix();
+    glRotatef(-45.0, 1.0, 0.0, 0.0);
+    glRotatef(45.0, 0.0, 0.0, 1.0);
+
+    glutSolidCube(1.0);
+
+    glPopMatrix();
+    glFlush();
+}
+
+void coneWire() {
+
+    glEnable(GL_LIGHTING);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glColor3f(1, 1, 1);
+
+    glPushMatrix();
+    glRotatef(-90.0, 1.0, 0.0, 0.0);
+
+    glutWireCone(0.3, 0.8, 10, 10);
+
+    glPopMatrix();
+    glFlush();
+}
+
+void coneSolid() {
+
+    glEnable(GL_LIGHTING);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glColor3f(1, 1, 1);
+
+    glPushMatrix();
+    glRotatef(-90.0, 1.0, 0.0, 0.0);
+
+    glutSolidCone(0.3, 0.8, 10, 10);
+
+    glPopMatrix();
+    glFlush();
+}
+
+void torusWire() {
+
+    glEnable(GL_LIGHTING);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glColor3f(1, 1, 1);
+
+    glutWireTorus(0.1, 0.5, 100, 100);
+    glFlush();
+}
+
+void torusSolid() {
+
+    glEnable(GL_LIGHTING);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glColor3f(1, 1, 1);
+
+    glutSolidTorus(0.1, 0.5, 100, 100);
+    glFlush();
+}
+
+void dodecahedronWire() {
+
+    glEnable(GL_LIGHTING);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glColor3f(1, 1, 0);
+    glPushMatrix();
+    glRotatef(-25.0, 1.0, 0.0, 0.0);
+    glRotatef(20.0, 0.0, 0.0, 1.0);
+    glScalef(0.5, 0.5, 0.5);
+
+    glutWireDodecahedron();
+    glPopMatrix();
+    glFlush();
+}
+
+void dodecahedronSolid() {
+
+    glEnable(GL_LIGHTING);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glColor3f(1, 1, 0);
+    glPushMatrix();
+    glRotatef(-25.0, 1.0, 0.0, 0.0);
+    glRotatef(20.0, 0.0, 0.0, 1.0);
+    glScalef(0.5, 0.5, 0.5);
+
+    glutSolidDodecahedron();
+    glPopMatrix();
+    glFlush();
+}
+
+void octahedronWire() {
+
+    glEnable(GL_LIGHTING);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glColor3f(1, 1, 1);
+    glPushMatrix();
+    glRotatef(-25.0, 1.0, 0.0, 0.0);
+    glRotatef(20.0, 0.0, 0.0, 1.0);
+    glScalef(0.5, 0.5, 0.5);
+
+    glutWireOctahedron();
+    glPopMatrix();
+    glFlush();
+}
+
+void octahedronSolid() {
+
+    glEnable(GL_LIGHTING);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glColor3f(1, 1, 1);
+    glPushMatrix();
+    glRotatef(-25.0, 1.0, 0.0, 0.0);
+    glRotatef(20.0, 0.0, 0.0, 1.0);
+    glScalef(0.5, 0.5, 0.5);
+
+    glutSolidOctahedron();
+    glPopMatrix();
+    glFlush();
+}
+
+void tetrahedronWire() {
+
+    glEnable(GL_LIGHTING);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glColor3f(1, 1, 1);
+    glPushMatrix();
+    glRotatef(-25.0, 1.0, 0.0, 0.0);
+    glRotatef(20.0, 0.0, 0.0, 1.0);
+    glScalef(0.5, 0.5, 0.5);
+
+    glutWireTetrahedron();
+    glPopMatrix();
+    glFlush();
+}
+
+void tetrahedronSolid() {
+
+    glEnable(GL_LIGHTING);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glColor3f(1, 1, 1);
+    glPushMatrix();
+    glRotatef(-25.0, 1.0, 0.0, 0.0);
+    glRotatef(20.0, 0.0, 0.0, 1.0);
+    glScalef(0.5, 0.5, 0.5);
+
+    glutSolidTetrahedron();
+    glPopMatrix();
+    glFlush();
+}
+
+void icosahedronWire() {
+
+    glEnable(GL_LIGHTING);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glColor3f(1, 1, 1);
+    glPushMatrix();
+    glRotatef(-25.0, 1.0, 0.0, 0.0);
+    glRotatef(20.0, 0.0, 0.0, 1.0);
+    glScalef(0.5, 0.5, 0.5);
+
+    glutWireIcosahedron();
+    glPopMatrix();
+    glFlush();
+}
+
+void icosahedronSolid() {
+
+    glEnable(GL_LIGHTING);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glColor3f(1, 1, 1);
+    glPushMatrix();
+    glRotatef(-25.0, 1.0, 0.0, 0.0);
+    glRotatef(20.0, 0.0, 0.0, 1.0);
+    glScalef(0.5, 0.5, 0.5);
+
+    glutSolidIcosahedron();
+    glPopMatrix();
+    glFlush();
+}
+
+void teapotWire() {
+
+    glEnable(GL_LIGHTING);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glColor3f(1, 1, 1);
+
+    glutWireTeapot(0.8);
+    glFlush();
+}
+
+void teapotSolid() {
+
+    glEnable(GL_LIGHTING);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glColor3f(1, 1, 1);
+
+    glutSolidTeapot(0.8);
+    glFlush();
 }
 
 void display() {
@@ -356,6 +639,78 @@ void display() {
         case 'v':
             lineLoop();
             break;
+        case 'q':
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            sphereWire();
+            break;
+        case 'Q':
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            sphereSolid();
+            break;
+        case 'w':
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            cubeWire();
+            break;
+        case 'W':
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            cubeSolid();
+            break;
+        case 'e':
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            coneWire();
+            break;
+        case 'E':
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            coneSolid();
+            break;
+        case 'r':
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            torusWire();
+            break;
+        case 'R':
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            torusSolid();
+            break;
+        case 't':
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            dodecahedronWire();
+            break;
+        case 'T':
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            dodecahedronSolid();
+            break;
+        case 'y':
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            octahedronWire();
+            break;
+        case 'Y':
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            octahedronSolid();
+            break;
+        case 'u':
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            tetrahedronWire();
+            break;
+        case 'U':
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            tetrahedronSolid();
+            break;
+        case 'i':
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            icosahedronWire();
+            break;
+        case 'I':
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            icosahedronSolid();
+            break;
+        case 'o':
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            teapotWire();
+            break;
+        case 'O':
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            teapotSolid();
+            break;
     }
 }
 
@@ -377,11 +732,13 @@ void main(int argc, char** argv) {
 
     // Standard initialization of window properties
     glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_SINGLE);
+    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(500, 500);
     glutInitWindowPosition(100, 100);
-    glutCreateWindow("Primitives -- Press asdfgh ASDFGH zxcv");
+    glutCreateWindow("Primitives -- 1D, 2D, 3D");
+    init();
 
+    glutReshapeFunc(reshape);
     glutKeyboardFunc(keyboard);
     glutDisplayFunc(display);
 
